@@ -268,10 +268,13 @@ async function sendCode(client, apiCredentials, phoneNumber, forceSMS = false) {
         if (sendResult instanceof tl_1.Api.auth.SentCodeSuccess)
             throw new Error("logged in right after sending the code");
         // If we already sent a SMS, do not resend the phoneCode (hash may be empty)
-        if (!forceSMS || sendResult.type instanceof tl_1.Api.auth.SentCodeTypeSms) {
+        if (!forceSMS ||
+            ("type" in sendResult &&
+                sendResult.type instanceof tl_1.Api.auth.SentCodeTypeSms)) {
             return {
                 phoneCodeHash: sendResult.phoneCodeHash,
-                isCodeViaApp: sendResult.type instanceof tl_1.Api.auth.SentCodeTypeApp,
+                isCodeViaApp: "type" in sendResult &&
+                    sendResult.type instanceof tl_1.Api.auth.SentCodeTypeApp,
             };
         }
         const resendResult = await client.invoke(new tl_1.Api.auth.ResendCode({
@@ -282,7 +285,8 @@ async function sendCode(client, apiCredentials, phoneNumber, forceSMS = false) {
             throw new Error("logged in right after resending the code");
         return {
             phoneCodeHash: resendResult.phoneCodeHash,
-            isCodeViaApp: resendResult.type instanceof tl_1.Api.auth.SentCodeTypeApp,
+            isCodeViaApp: "type" in resendResult &&
+                resendResult.type instanceof tl_1.Api.auth.SentCodeTypeApp,
         };
     }
     catch (err) {
