@@ -406,6 +406,14 @@ async function _getEntityFromString(client, string) {
             }
         }
     }
+    // Fallback: try resolving from disk cache by exact name/title (Telethon-like behavior)
+    try {
+        const cachedInput = client.session.getInputEntity(string);
+        if (cachedInput) {
+            return await getEntity(client, cachedInput);
+        }
+    }
+    catch (e) { }
     throw new Error(`Cannot find any entity corresponding to "${string}"`);
 }
 exports._getEntityFromString = _getEntityFromString;
