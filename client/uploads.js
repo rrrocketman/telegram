@@ -305,7 +305,7 @@ async function _fileToMedia(client, { file, forceDocument, fileSize, progressCal
         }
         media = new tl_1.Api.InputMediaUploadedDocument({
             file: fileHandle,
-            mimeType: mimeType,
+            mimeType: mimeType || "application/octet-stream",
             attributes: attributes,
             thumb: uploadedThumb,
             forceFile: forceDocument && !isImage,

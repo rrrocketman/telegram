@@ -842,7 +842,7 @@ function getInputMedia(media, { isPhoto = false, attributes = undefined, forceDo
             });
             return new tl_1.Api.InputMediaUploadedDocument({
                 file: media,
-                mimeType: mimeType,
+                mimeType: mimeType || "application/octet-stream",
                 attributes: attrs,
                 forceFile: forceDocument,
             });
